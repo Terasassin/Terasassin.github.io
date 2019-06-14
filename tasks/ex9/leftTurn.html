@@ -1,4 +1,5 @@
-
+<!--author:Terasassin  github: https://github.com/Terasassin -->
+<!--参考：https://github.com/Haloer/gisalgorithm-->
 <!Doctype html>
 <html>
 
@@ -232,17 +233,21 @@
         }
 
         function ShowResult() {
-            document.getElementById('r1').style.display = "block";
-            document.getElementById('r1').innerHTML += "A1: " + " N1N2,N2N5,N5N1";
-            document.getElementById('r1').innerHTML += "<br>";
-            document.getElementById('r1').innerHTML += "A2: " + " N1N5,N5N4,N4N1";
-            document.getElementById('r1').innerHTML += "<br>";
-            document.getElementById('r1').innerHTML += "A3: " + " N1N4,N4N3,N3N2,N2N1";
-            document.getElementById('r1').innerHTML += "<br>";
-            document.getElementById('r1').innerHTML += "A4: " + " N2N3,N3N5,N5N2";
-            document.getElementById('r1').innerHTML += "<br>";
-            document.getElementById('r1').innerHTML += "A5: " + " N3N4,N4N5,N5N3";
-            document.getElementById('r1').innerHTML += "<br>";
+ 			document.getElementById('r1').style.display = "block";
+            for (var i = 0; i < polygon.length; i++) {
+                document.getElementById('r1').innerHTML += "polygon" + (i + 1) + "：";
+                for (var j = 0; j < polygon[i].data.length; j++) {
+                	if(j!=polygon[i].data.length-1)
+                	{
+                    	document.getElementById('r1').innerHTML += "边: " + polygon[i].data[j].id + " > ";
+                	}
+                	else
+                	{
+                		document.getElementById('r1').innerHTML += "边: " + polygon[i].data[j].id;
+                	}
+                }
+                document.getElementById('r1').innerHTML += "<br>";
+            }
         }
 
         //判断array中是否有point，在哪个位置

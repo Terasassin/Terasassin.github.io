@@ -1,16 +1,30 @@
-﻿
+﻿<!--author:Terasassin  github: https://github.com/Terasassin -->
+<!--参考：https://github.com/Haloer/gisalgorithm 完成了图像显示的优化工作，减少界面冗余-->
 <html>
 <header>
     <title>矢量转栅格</title>
+    <style type="text/css">
+	.container{ margin:0 auto; width:800px; }
+</style>
 </header>
 
 <body>
+
     <input type="file" id="file" onchange="readGen(this.file)">
     <br>
-    <canvas id="canvas" style="margin-left:20px;margin-top:10px;float:left"></canvas>
+    原图：
+    <div class="container">
+    <canvas id="canvas" width="800" height="400" style="margin:0 auto;border:1px solid #000"></canvas>
+	</div>
+    	
+    </div>
     <canvas id="canvas1"></canvas>
     <table id="matrix"></table>
-    <textarea name="r_text" id="rr_text" cols="200" rows="100"onpropertychange= "this.style.posHeight=this.scrollHeight "></textarea>
+    栅格数据：
+    <div class="container2">
+    	<textarea name="r_text" id="rr_text" cols="200" rows="100"onpropertychange= "this.style.posHeight=this.scrollHeight "></textarea>
+    </div>>
+
 
     <script>
         //结点类
