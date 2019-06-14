@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>线性四叉树</title>
+</head>
+<body>
+
+	<input id="fileInput" type="file" onchange="ReadFile()"/>
+
+	<input type="button" id="four" value="四进制编码" onclick="FourCode()">
+
+	<input type="button" id="ten"  value="十进制编码" onclick="TenCode()">
+	
+	<br>
+
+
+	<textarea name="text" id="result" cols="100" rows="30"></textarea>
+
+</body>
+<script>
+
+	var str="";
+	var strLine = new Array();
+	var strNum = new Array();
+	var binNum = new Array();
+	var tenNum = new Array();
+
+	var originP1=0;
+	var originP2=4;
+
+	function ReadFile()
+	{
+		var file=document.getElementById("fileInput").files[0];
+        var reader=new FileReader();
+
+        reader.readAsText(file);
+
+        reader.onload=function(e)
+    	{
+        	str=this.result;
+        	strLine=str.split("\n");
+
+        	for(var i=0;i<strLine.length;i++)
+    		{
+    			strNum[i]=new Array();
+    			strNum[i]=strLine[i].split(",");
+    			strNum[i].splice(8,1);
+    		}
+    	}
+	}
+
+	function FourCode()
+	{
+		document.getElementById("result").value="";
+		TranslationFour();
+    	ResultFour();
+    	FourShowResult();
+    	console.log(binNum);
+	}
+
+	function TenCode()
+	{	
+		document.getElementById("result").value="";
+		TranslationTen();
+		ResultTen();
+		TenShowResult();
+		console.log(tenNum);
+	}
+
+	function TranslationFour()
+	{
+		for(var i=0;i<strLine.length;i++)
+		{
+			binNum[i] = new Array;
+			for(var j=0;j<strNum[i].length;j++)
+			{
+
+				binNum[i][j]=(parseInt((i.toString(2)).toString())*2+parseInt((j.toString(2)).toString())).toString();
+				if(binNum[i][j].length==1)
+				{
+					binNum[i][j]="00"+binNum[i][j];
+				}
+				if(binNum[i][j].length==2)
+				{
+					binNum[i][j]="0"+binNum[i][j];
+				}
+			}
+		}
+	}
+
+	function TranslationTen()
+	{
+		var binRow=0;
+		var binColumn=0;
+		for(var i=0;i<strLine.length;i++)
+		{
+			tenNum[i] = new Array();
+			for(var j=0;j<strNum[i].length;j++)
+			{
+				binRow=i.toString(2);
+				binColumn=j.toString(2);
+				if(binRow.length==1)
+				{
+					binRow="00"+binRow;
+				}
+				if(binRow.length==2)
+				{
+					binRow="0"+binRow;
+				}
+				if(binColumn.length==1)
+				{
+					binColumn="00"+binColumn;
+				}
+				if(binColumn.length==2)
+				{
+					binColumn="0"+binColumn;
+				}
+				tenNum[i][j]=binRow[0]+binColumn[0]+binRow[1]+binColumn[1]+binRow[2]+binColumn[2];
+				tenNum[i][j]=parseInt(tenNum[i][j],2);
+			}
+		}
+	}
+
+	//第一层
+	function ResultFour()
+	{
+		//合并
+		var i = Judge(strNum,originP1+4,originP1+4,originP1,originP1);
+		if(i==1)
+		{
+			Change(binNum,originP1+4,originP1+4,originP1,originP1);
+		}
+		else
+		{
+			ResultFour2(strNum,0,2,0,0);
+		}
+
+		var j = Judge(strNum,originP1+4,originP2+4,originP1,originP2);
+		if(j==1)
+		{
+			Change(binNum,originP1+4,originP2+4,originP1,originP2);
+		}
+		else
+		{
+			ResultFour2(strNum,0,4);
+		}
+
+
+		var m = Judge(strNum,originP2+4,originP1+4,originP2,originP1);
+		if(m==1)
+		{
+			Change(binNum,originP2+4,originP1+4,originP2,originP1);
+		}
+		else
+		{
+			ResultFour2(strNum,4,0);
+		}
+
+
+		var n = Judge(strNum,originP2+4,originP2+4,originP2,originP2);
+		if(n==1)
+		{
+			Change(binNum,originP2+4,originP2+4,originP2,originP2);
+		}
+		else
+		{
+			ResultFour2(strNum,4,4);
+		}
+
+	}
+
+	//第二层合并
+	function ResultFour2(Num,oP1,oP2)
+	{
+		var i = Judge(Num,2+oP1,2+oP2,oP1,oP2);
+		if(i==1)
+		{
+			Change(binNum,2+oP1,2+oP2,oP1,oP2);
+		}
+
+
+		var j = Judge(Num,2+oP1,2+oP2+2,oP1,oP2+2);
+		if(j==1)
+		{
+			Change(binNum,2+oP1,2+oP2+2,oP1,oP2+2);
+		}
+
+
+		var m = Judge(Num,2+oP1+2,2+oP2,oP1+2,oP2);
+		if(m==1)
+		{
+			Change(binNum,2+oP1+2,2+oP2,oP1+2,oP2);
+		}
+
+
+		var n = Judge(Num,2+oP1+2,2+oP2+2,oP1+2,oP2+2);
+		if(n==1)
+		{
+			Change(binNum,2+oP1+2,2+oP2+2,oP1+2,oP2+2);
+		}
+
+	}
+
+	function ResultTen()
+	{
+		var i = Judge(strNum,originP1+4,originP1+4,originP1,originP1);
+		if(i==1)
+		{
+			Change(tenNum,originP1+4,originP1+4,originP1,originP1);
+		}
+		else
+		{
+			ResultTen2(strNum,0,2,0,0);
+		}
+
+		var j = Judge(strNum,originP1+4,originP2+4,originP1,originP2);
+		if(j==1)
+		{
+			Change(tenNum,originP1+4,originP2+4,originP1,originP2);
+		}
+		else
+		{
+			ResultTen2(strNum,0,4);
+		}
+
+
+		var m = Judge(strNum,originP2+4,originP1+4,originP2,originP1);
+		if(m==1)
+		{
+			Change(tenNum,originP2+4,originP1+4,originP2,originP1);
+		}
+		else
+		{
+			ResultTen2(strNum,4,0);
+		}
+
+
+		var n = Judge(strNum,originP2+4,originP2+4,originP2,originP2);
+		if(n==1)
+		{
+			Change(tenNum,originP2+4,originP2+4,originP2,originP2);
+		}
+		else
+		{
+			ResultTen2(strNum,4,4);
+		}
+	}
+
+	function ResultTen2(Num,oP1,oP2)
+	{
+		var i = Judge(Num,2+oP1,2+oP2,oP1,oP2);
+		if(i==1)
+		{
+			Change(tenNum,2+oP1,2+oP2,oP1,oP2);
+		}
+
+
+		var j = Judge(Num,2+oP1,2+oP2+2,oP1,oP2+2);
+		if(j==1)
+		{
+			Change(tenNum,2+oP1,2+oP2+2,oP1,oP2+2);
+		}
+
+
+		var m = Judge(Num,2+oP1+2,2+oP2,oP1+2,oP2);
+		if(m==1)
+		{
+			Change(tenNum,2+oP1+2,2+oP2,oP1+2,oP2);
+		}
+
+
+		var n = Judge(Num,2+oP1+2,2+oP2+2,oP1+2,oP2+2);
+		if(n==1)
+		{
+			Change(tenNum,2+oP1+2,2+oP2+2,oP1+2,oP2+2);
+		}
+	}
+
+	function Judge(Num,row,column,x,y)
+	{
+		for(var i=x;i<row;i++)
+		{
+			for(var j=y;j<column;j++)
+			{
+				if(Num[i][j]!=Num[x][y])
+				{
+					return 0;
+				}
+			}
+		}
+		return 1;
+	}
+
+	function Change(Num,rowMax,columnMax,x,y)
+	{
+		for(var i=x;i<rowMax;i++)
+		{
+			for(var j=y;j<columnMax;j++)
+			{
+				Num[i][j]=Num[x][y];
+			}
+		}
+	}
+
+	function FourShowResult()
+	{
+		var originText="";
+		for(var i=0;i<strLine.length;i++)
+		{
+			for(var j=0;j<strNum[i].length;j++)
+			{
+				originText+=strNum[i][j]+"\t";
+			}
+			originText+="\n";
+		}
+
+		var fourText="";
+		for(var i=0;i<strLine.length;i++)
+		{
+			for(var j=0;j<strNum[i].length;j++)
+			{
+				fourText+=binNum[i][j]+"\t";
+			}
+			fourText+="\n";
+		}
+		document.getElementById("result").value="原矩阵: \n"+originText+"\n\n\n"+"四进制编码: \n"+fourText;
+	}
+
+	function TenShowResult()
+	{
+		var originText="";
+		for(var i=0;i<strLine.length;i++)
+		{
+			for(var j=0;j<strNum[i].length;j++)
+			{
+				originText+=strNum[i][j]+"\t";
+			}
+			originText+="\n";
+		}
+		var tenText="";
+		for(var i=0;i<strLine.length;i++)
+		{
+			for(var j=0;j<strNum[i].length;j++)
+			{
+				tenText+=tenNum[i][j]+"\t";
+			}
+			tenText+="\n";
+		}
+		document.getElementById("result").value="原矩阵: \n"+originText+"\n\n\n"+"十进制编码: \n"+tenText;
+	}
+
+</script>
+</html>

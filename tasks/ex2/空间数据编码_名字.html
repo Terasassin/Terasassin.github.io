@@ -1,0 +1,292 @@
+<html>  
+    <head>  
+        <title>名称编码</title>  
+    </head>  
+        <body>             
+            <canvas id="myCanvas" width="350" height="350" style="border:1px solid #c3c3c3">your browser does not support the canvas tag </canvas>
+            <canvas id="myCanvas2" width="350" height="350" style="border:1px solid #c3c3c3">your browser does not support the canvas tag </canvas>
+            <canvas id="myCanvas3" width="350" height="350" style="border:1px solid #c3c3c3">your browser does not support the canvas tag </canvas>
+            <br>
+    <div style="top:500px">
+        <input id="fileInput" type="file" onchange="processFiles()"/>  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                <input id="fileInput2" type="file" onchange="processFiles2()"/>  &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+                        <input id="fileInput3" type="file" onchange="processFiles3()"/>
+    </div>
+    <script>  
+                var number = new Array();//存储原始点数据
+                var tran = new Array();//存储变换点数据
+                var a = new Array();//存储x轴
+                var b = new Array();
+                var tranx = new Array();//存储变换x轴
+                var trany = new Array();
+
+                //主函数
+                function processFiles(){ 
+                    var file=document.getElementById("fileInput").files[0];
+                    var reader=new FileReader();
+                    reader.readAsText(file);
+                    reader.onload=function(e)
+                    {
+                        var str = this.result;//读取文本
+                            
+                        number= digitalExtraction(str,number);//提取数字并存入数组
+                        tran=number.slice(0);
+                        XY();
+ 
+                        draw(number);
+                        dracanvas(a,b);                 
+                    }
+                }
+                 function processFiles2(){ 
+                    var file=document.getElementById("fileInput2").files[0];
+                    var reader=new FileReader();
+                    reader.readAsText(file);
+                    reader.onload=function(e)
+                    {
+                        var str = this.result;//读取文本
+                            
+                        number= digitalExtraction(str,number);//提取数字并存入数组
+                        tran=number.slice(0);
+                        XY2();
+ 
+                        draw2(number);
+                        dracanvas2(a,b);                 
+                    }
+                }
+                 function processFiles3(){ 
+                    var file=document.getElementById("fileInput3").files[0];
+                    var reader=new FileReader();
+                    reader.readAsText(file);
+                    reader.onload=function(e)
+                    {
+                        var str = this.result;//读取文本
+                            
+                        number= digitalExtraction(str,number);//提取数字并存入数组
+                        tran=number.slice(0);
+                        XY3();
+ 
+                        draw3(number);
+                        dracanvas3(a,b);                 
+                    }
+                }
+                //提取数字，并存入数组
+                function digitalExtraction(str,number){
+                        var heap= str.replace(/[^0-9.L]/ig,"A");
+ 
+                        var numcharacter="";//存储数字字符
+                        var number =new Array();//提取数字数组
+                        var i=0;
+                        var flag=0;//heap字符串当前标记
+                        var n=0;//标识数字与字符转换位置
+                        var character=heap[flag];//获取字符串的一个字符
+                    // document.write(heap);
+                        while(character!=null){
+                            if(character=="L"){
+                                number[i++]=-1;
+                                flag+=2;
+                                character=heap[flag];
+                            }
+                            if(character!="A"){
+                                n=1;
+                                numcharacter+=character;
+                            }
+                            else{
+                                if(n){
+                                    number[i++]=parseFloat(numcharacter);
+                                    numcharacter="";
+                                    n=0;
+                                }
+                            }
+                            character=heap[++flag];
+                        }
+                    
+                        return number;
+                }
+                //画图函数
+                function draw(numb){
+                    var canvas=document.getElementById('myCanvas');
+                        
+                        
+                    var cxt=canvas.getContext('2d'); 
+                    cxt.lineWidth = 8;
+                    cxt.strokeStyle = "balck";   
+                    var n= numb.length;
+                    numb[n]=-1;
+                    var n= numb.length;
+ 
+                    var flag=0;
+                    var x= new Array();
+                    var y =new Array();
+                    var j=0;
+                    cxt.clearRect(0,0,900,900);
+                    
+                    for(var i=1,j=0;i<n;i++){
+                        if(numb[i]!=-1){
+                            x[j]=numb[i]*15;
+                            y[j]=numb[++i]*15;
+                            j++;
+                        }else{
+                            cxt.beginPath();
+                            cxt.moveTo(x[0],y[0]);
+                            for(var k=1;k<j;k++){
+                                cxt.lineTo(x[k],y[k]);
+                            }
+                            cxt.stroke();
+                            j=0;
+                        }
+                    }
+                }
+                function draw2(numb){
+                    var canvas=document.getElementById('myCanvas2');
+                        
+                        
+                    var cxt=canvas.getContext('2d'); 
+                    cxt.lineWidth = 8;
+                    cxt.strokeStyle = "balck";   
+                    var n= numb.length;
+                    numb[n]=-1;
+                    var n= numb.length;
+ 
+                    var flag=0;
+                    var x= new Array();
+                    var y =new Array();
+                    var j=0;
+                    cxt.clearRect(0,0,900,900);
+                    
+                    for(var i=1,j=0;i<n;i++){
+                        if(numb[i]!=-1){
+                            x[j]=numb[i]*15;
+                            y[j]=numb[++i]*15;
+                            j++;
+                        }else{
+                            cxt.beginPath();
+                            cxt.moveTo(x[0],y[0]);
+                            for(var k=1;k<j;k++){
+                                cxt.lineTo(x[k],y[k]);
+                            }
+                            cxt.stroke();
+                            j=0;
+                        }
+                    }
+                }
+                function draw3(numb){
+                    var canvas=document.getElementById('myCanvas3');
+                        
+                        
+                    var cxt=canvas.getContext('2d'); 
+                    cxt.lineWidth = 8;
+                    cxt.strokeStyle = "balck";   
+                    var n= numb.length;
+                    numb[n]=-1;
+                    var n= numb.length;
+ 
+                    var flag=0;
+                    var x= new Array();
+                    var y =new Array();
+                    var j=0;
+                    cxt.clearRect(0,0,900,900);
+                    
+                    for(var i=1,j=0;i<n;i++){
+                        if(numb[i]!=-1){
+                            x[j]=numb[i]*15;
+                            y[j]=numb[++i]*15;
+                            j++;
+                        }else{
+                            cxt.beginPath();
+                            cxt.moveTo(x[0],y[0]);
+                            for(var k=1;k<j;k++){
+                                cxt.lineTo(x[k],y[k]);
+                            }
+                            cxt.stroke();
+                            j=0;
+                        }
+                    }
+                }
+                function XY(){
+                    for(var i=0;i<32;i++){
+                        a[i]=i*10;
+                        b[i]=i*10;
+                    }
+                    tranx=a.slice(0);
+                    trany=b.slice(0);
+                }
+                 function XY2(){
+                    for(var i=0;i<32;i++){
+                        a[i]=i*10;
+                        b[i]=i*10;
+                    }
+                    tranx=a.slice(0);
+                    trany=b.slice(0);
+                }
+                 function XY3(){
+                    for(var i=0;i<32;i++){
+                        a[i]=i*10;
+                        b[i]=i*10;
+                    }
+                    tranx=a.slice(0);
+                    trany=b.slice(0);
+                }
+                //画布
+                function dracanvas(ax,by){
+                    var canvas=document.getElementById("myCanvas");
+ 
+                    var ctx =canvas.getContext('2d');
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = "black";  
+                    
+                    for(var i=0;i<32;i++){
+                        ctx.beginPath();
+                        ctx.moveTo(ax[0],by[i]);
+                        ctx.lineTo(ax[31],by[i]);
+                        ctx.stroke();
+                    }
+                    for(var i=0;i<32;i++){
+                        ctx.beginPath();
+                        ctx.moveTo(ax[i],by[0]);
+                        ctx.lineTo(ax[i],by[31]);  
+                        ctx.stroke();
+                    }
+                }
+                function dracanvas2(ax,by){
+                    var canvas=document.getElementById("myCanvas2");
+ 
+                    var ctx =canvas.getContext('2d');
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = "black";  
+                    
+                    for(var i=0;i<32;i++){
+                        ctx.beginPath();
+                        ctx.moveTo(ax[0],by[i]);
+                        ctx.lineTo(ax[31],by[i]);
+                        ctx.stroke();
+                    }
+                    for(var i=0;i<32;i++){
+                        ctx.beginPath();
+                        ctx.moveTo(ax[i],by[0]);
+                        ctx.lineTo(ax[i],by[31]);  
+                        ctx.stroke();
+                    }
+                }
+                function dracanvas3(ax,by){
+                    var canvas=document.getElementById("myCanvas3");
+ 
+                    var ctx =canvas.getContext('2d');
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = "black";  
+                    
+                    for(var i=0;i<32;i++){
+                        ctx.beginPath();
+                        ctx.moveTo(ax[0],by[i]);
+                        ctx.lineTo(ax[31],by[i]);
+                        ctx.stroke();
+                    }
+                    for(var i=0;i<32;i++){
+                        ctx.beginPath();
+                        ctx.moveTo(ax[i],by[0]);
+                        ctx.lineTo(ax[i],by[31]);  
+                        ctx.stroke();
+                    }
+                }
+            </script>   
+        </body>  
+</html> 

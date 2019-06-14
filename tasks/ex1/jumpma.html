@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+
+<html>
+
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<head>
+
+    <title>跳马</title>
+
+    
+
+</head>
+
+
+
+<body>
+
+       <div id="div 1" >
+
+                   <!--得到棋盘行数m-->
+
+                  棋盘行数 <input   id="m" type="number"  min="0"max="10"step="1"value="0">   
+
+                    <!--得到棋盘列数n-->
+
+                  棋盘列数 <input   id="n"type="number"  min="0" max="10"step="1"value="0"> 
+
+                    <!--得到马起点位置ma_x-->
+
+                  初始x坐标  <input   id="ma_x"type="number"  min="0" max="10" step="1" value="0">
+
+                    <!--得到马起点位置ma_y-->
+
+                  初始y坐标  <input   id="ma_y" type="number"  min="0"max="10" step="1"value="0">
+
+                     <!--第三行-->
+
+                <input id="getOK" type="button"value="开始"  onclick="print()">
+
+                <input id="cleartext" type="button" value="清空" onclick="show_confirm()">
+
+               
+         </div>
+
+
+                <textarea name="result_text" id="result_text" cols="100" rows="30"  onpropertychange= "this.style.posHeight=this.scrollHeight "></textarea>
+
+        <script type="text/javascript">
+
+            // <!--开始编写跳马程序-->
+
+            var road_ma=0;//总路线数
+
+            var m,n,ma_x,ma_y;
+
+            var road_x=new Array();//存储当前的路径x
+
+            var road_y=new Array();//存储当前的路径y
+
+            var road_num=0;//目前走了几步？
+
+            var checkerboard=new Array();//棋盘数组,1=已经走过，0=没走过，2=边界点
+
+            var boundarynum=0;//判断棋子是否走到过边界
+
+            var ma_x_everyroad=new Array("1","2","2","1","-1","-2","-2","-1");//写每步的8个方向的走法，每一步x的走法
+
+            var ma_y_everyroad=new Array("2","1","-1","-2","-2","-1","1","2");//每一步y的走法
+
+             function print()
+
+             {//相当于main
+
+                 road_num=0;//每次print都是新的
+
+                 //读取棋盘m*n，起点ma_x,ma_y
+
+                 m=parseInt(document.getElementById("m").value);
+
+                 n=parseInt(document.getElementById("n").value);
+
+                 ma_x=parseInt(document.getElementById("ma_x").value);
+
+                 ma_y=parseInt(document.getElementById("ma_y").value);
+
+                 console.log("m=%d,n=%d,ma_x=%d,ma_y=%d\n",m,n,ma_x,ma_y);
+
+ //                 for(var i=0;i<8;i++)
+
+ //                {  //尝试输出设置好的8个方向
+
+ //                        console.log("id=%d,x+=%d,y+=%d\n",i,parseInt(ma_x_everyroad[i]),parseInt(ma_y_everyroad[i]));
+
+ //                    
+
+ //                }
+
+                 if(ma_x>m||ma_y>n)
+
+                 {
+
+                     print_wrong();
+
+                     return 0;//出现棋盘《起点，报错退出
+
+                 }
+
+                 for(var i=0;i<m;i++)
+
+                 {//初始化起盘
+
+                    checkerboard[i]=new Array();
+
+                    for(var j=0;j<n;j++)
+
+                    {
+
+                        checkerboard[i][j]=0;
+
+                    }
+
+                 }
+
+                 //记录起始点
+
+                 road_x[road_num]=ma_x;
+
+                 road_y[road_num]=ma_y;
+
+                 ++road_num;
+
+                 //开始对前进处理
+
+                 jump_ma(ma_x,ma_y,m,n,ma_x,ma_y);
+
+                 document.getElementById("result_text").value=document.getElementById("result_text").value+" \n\n共"+road_ma+"条线路";    
+
+                 console.log("运算结束");
+
+                 road_ma=0;
+
+             }
+
+               
+
+             function print_wrong()
+
+             {
+
+                 //判断是否棋盘大小和起点有误
+
+                if (confirm("起点不在棋盘上？"))
+
+                 {  
+
+                    alert("确定，重新修改");  
+
+                 }  
+
+                else {  
+
+                    alert("点击了取消");  
+
+                 }  
+
+             }
+
+
+
+             function jump_ma(x,y,m,n,ma_x,ma_y)
+
+             {
+
+                 for(var i=0;i<8;i=i+1)
+
+                 {
+
+                     var new_x=x+parseInt(ma_x_everyroad[i]);//下一步的X
+
+                     var new_y=y+parseInt(ma_y_everyroad[i]);//下一步的Y
+
+                     if(jump_begin(new_x,new_y,ma_x,ma_y)==0)
+
+                     {
+
+
+
+                         if(jump_boundary(new_x,new_y,m,n)==-1)
+
+                         {//当下一步超出边界
+
+                               continue;
+                         }
+
+                         if(jump_boundary(new_x,new_y,m,n)==1)
+
+                         {//当下一步在边界上
+
+                              if(checkerboard[new_x][new_y]==0)
+
+                              {//在边界上的下一步没走过
+
+
+                                  if(boundarynum%2==0)
+
+                                 {//当没有到过边界
+
+                                    boundarynum=boundarynum+1;
+
+                                    checkerboard[new_x][new_y]=2;
+
+                                 }
+
+                                else
+
+                                {
+
+                                    checkerboard[new_x][new_y]=1;//1=已经走过，0=没走过，2=边界点
+
+                                }
+
+                                 road_x[road_num]=new_x;
+
+                                 road_y[road_num]=new_y;
+
+                                 ++road_num;
+
+                                 jump_ma(new_x,new_y,m,n,ma_x,ma_y);
+
+					             continue;
+
+                              }
+
+                                  continue;
+
+                         }
+
+                         if(jump_boundary(new_x,new_y,m,n)==0)
+
+                         {
+
+                              if(checkerboard[new_x][new_y]==0)
+
+                              {
+
+                                 checkerboard[new_x][new_y]=1;
+
+                                 road_x[road_num]=new_x;
+
+                                 road_y[road_num]=new_y;
+
+                                 ++road_num;
+
+                                 jump_ma(new_x,new_y,m,n,ma_x,ma_y);
+
+
+					             continue;
+
+                              }
+
+                         }
+
+
+                     }
+
+                     else
+
+                     {//当下一步返回起点时
+
+                        console.log("(%d,%d)是起点",new_x,new_y);
+
+                         if(boundarynum%2==1&&road_num>2)
+
+                         {
+
+                             road_ma=road_ma+1;
+
+                            boundarynum=boundarynum+1;
+
+                            var str="\n路线：";
+
+
+
+                            for(var i=0;i<road_num;i++)
+
+                            {
+
+                                str=str+"("+road_x[i]+","+road_y[i]+")>";
+
+                            }
+
+                            str=str+"("+ma_x+","+ma_y+")";
+
+                            addText(str);
+
+                         }
+
+                         else
+
+                         {
+
+                             if(jump_boundary(road_x[1],road_y[1],m,n)==1)
+
+                             {
+
+                            road_ma=road_ma+1;
+
+                            var str="\n路线：";
+
+                            str=str+"("+ma_x+","+ma_y+")>"+"("+road_x[1]+","+road_y[1]+")>"+"("+ma_x+","+ma_y+")";
+
+                            console.log("路线："+str);
+
+                            addText(str);
+
+                             }
+
+                         }
+
+                     }
+
+                 }
+                 
+
+                 if(checkerboard[x][y]==2)
+
+                 {
+
+                     boundarynum=boundarynum-1;
+
+
+                 }
+
+                 checkerboard[x][y]=0;
+
+                 road_x[road_num]=0;
+
+                 road_y[road_num]=0;
+
+                 road_num=road_num-1;
+
+
+                 return 1;
+
+             }
+
+
+
+              function jump_boundary(x,y,m,n)
+
+             {
+
+                if (x >= m || x < 0 || y >= n || y < 0)
+
+	             {//超出边界
+
+		              return -1;
+
+	             }
+
+	            if (x == m-1 || x == 0 || y == 0 || y == n-1)
+
+	             {//在边界上
+
+		              return 1;
+
+	             }
+
+	             if (x<m-1&&x>0&&y<n-1&&y>0)
+
+	             {//0<=x<m,0<=y<n，在边界内
+
+		              return 0;
+
+	             }
+
+              }
+
+
+
+              function jump_begin(x,y,ma_x,ma_y)
+
+              {
+
+                  if(x==ma_x&&y==ma_y)
+
+                  {//1=已到起点
+
+                      return 1;
+
+                  }
+
+                  else
+
+                  {//0=未到起点
+
+                      return 0;
+
+                  }
+
+              }
+
+
+
+              function addText(str)
+
+              {
+
+                 document.getElementById("result_text").value=document.getElementById("result_text").value+"\n"+str;                
+
+              }
+
+
+
+              function show_confirm()
+
+             {
+
+                var r=confirm("确认要清空吗？");
+
+                if (r==true)
+
+                { 
+
+                    document.getElementById("result_text").innerText="路线结果："             
+
+                }
+
+}
+
+
+
+        </script>
+
+</body>
+
+</html>

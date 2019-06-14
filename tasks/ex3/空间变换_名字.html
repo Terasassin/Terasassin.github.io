@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>名称变换</title>
+</head>
+<body>
+    &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+	<input type="radio" name="radioLove" value="reduction" checked="checked" onclick="reduction()"> 初始化 &nbsp
+    <input type="radio" name="radioLove" value="symmetryx" onclick="symmetryx()"> 左右对称 &nbsp  
+    <input type="radio" name="radioLove" value="symmetryy" onclick="symmetryy()"> 上下对称 &nbsp  
+    <input type="radio" name="radioLove" value="enlarge" onclick="enlarge()"> 放大 &nbsp
+    <input type="radio" name="radioLove" value="shrink" onclick="shrink()"> 缩小 &nbsp
+    <input type="radio" name="radioLove" value="rotate" onclick="rotate()"> 旋转 &nbsp
+    <input type="radio" name="radioLove" value="leftoblique" onclick="leftoblique()"> 左斜 &nbsp
+    <input type="radio" name="radioLove" value="shrugged" onclick="shrugged()"> 耸肩  &nbsp   
+    <input type="radio" name="radioLove" value="leftoblique" onclick="translateleft()"> 右平移 &nbsp
+    <input type="radio" name="radioLove" value="leftoblique" onclick="translatetop()"> 上平移 
+
+    <br>
+    <br>
+            &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+    <canvas id="myCanvas" width="500" height="400" style="border:1px">your browser does not support the canvas tag </canvas>
+    <canvas id="myCanvas2" width="500" height="400" style="border:1px">your browser does not support the canvas tag </canvas>
+
+    <div style="top:500px">
+    	&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+        <input id="fileInput" type="file" onchange="processFiles()"/>
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+        <input id="fileInput2" type="file" onchange="processFiles2()"/>
+
+        <br>
+        <br>
+        &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+        <input type="radio" name="radioChoose" id="box1" onclick="changeBox1()"> 
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+		&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+		&nbsp &nbsp
+        <input type="radio" name="radioChoose" id="box2" onclick="changeBox2()"> 
+
+    </div>
+    <script>
+
+    	 		var number = new Array();//存储原始点数据
+                var tran = new Array();//存储变换点数据
+                var a = new Array();//存储x轴
+                var b = new Array();
+                var tranx = new Array();//存储变换x轴
+                var trany = new Array();  
+                var thiscanvas="";
+                var canChange=false;
+
+    	 		var number1 = new Array();//存储原始点数据
+                var tran1 = new Array();//存储变换点数据
+                var a1 = new Array();//存储x轴
+                var b1 = new Array();
+                var tranx1 = new Array();//存储变换x轴
+                var trany1 = new Array();
+
+                var number2 = new Array();//存储原始点数据
+                var tran2 = new Array();//存储变换点数据
+                var a2 = new Array();//存储x轴
+                var b2 = new Array();
+                var tranx2 = new Array();//存储变换x轴
+                var trany2 = new Array();
+                
+                //放大
+                function enlarge()
+                {
+                	if(canChange==true)
+                	{
+                    var numberlarge = new Array();
+                    numberlarge=tran.slice(0);
+                    var xlarge=new Array();
+                    var ylarge=new Array();
+                    xlarge=tranx.slice(0);
+                    ylarge=trany.slice(0);
+ 
+                    for(var i=0;i<numberlarge.length;i++){
+                        if(numberlarge[i]!=-1){
+                            numberlarge[i]*=1.05;
+                        }
+                       
+                    }
+                    for(var i=0;i<tran.length;i++){
+                        xlarge[i]*=1.05;
+                        ylarge[i]*=1.05;            
+                    }
+                    tran=numberlarge.slice(0);
+                    tranx=xlarge.slice(0);
+                    trany=ylarge.slice(0);
+                    
+                    draw(numberlarge);
+                    dracanvas(a,b);//坐标系
+                }
+
+                    
+                } 
+                //左右倾斜
+                function leftoblique()
+                {
+                	if(canChange==true)
+                	{
+                    var numberleftoblique = new Array();
+                    numberleftoblique=tran.slice(0);
+                    var xleftoblique=new Array();
+                    var yleftoblique=new Array();
+                    var sb=new Array();
+                    xleftoblique=tranx.slice(0);
+                    yleftoblique=trany.slice(0);
+                    sb=outsourcing(numberleftoblique);
+ 
+                    for(var i=0;i<numberleftoblique.length;i++){
+                        if(numberleftoblique[i]!=-1){
+                            x=numberleftoblique[i];
+                            y=numberleftoblique[i+1]; 
+                            x-=sb[0];
+                            y-=sb[1];
+                            numberleftoblique[i]=x*Math.cos(Math.PI/15.0)+y*Math.sin(Math.PI/12.0);
+                            numberleftoblique[i]+=sb[0];
+                            i++;
+                        }
+                    }
+                    tran=numberleftoblique.slice(0);
+                    
+                    draw(numberleftoblique);  
+                    dracanvas(a,b);//坐标系   
+                }
+                }
+                //上下倾斜
+                function shrugged()
+                {
+                	if(canChange==true)
+                	{
+                    var numbershrugged = new Array();
+                    numbershrugged=tran.slice(0);
+                    var sb=new Array();
+                    sb=outsourcing(numbershrugged);
+ 
+                    for(var i=0;i<numbershrugged.length;i++){
+                        if(numbershrugged[i]!=-1){
+                            x=numbershrugged[i];
+                            y=numbershrugged[++i]; 
+                            x-=sb[0];
+                            y-=sb[1];
+                            numbershrugged[i]=y*Math.cos(Math.PI/12.0)-x*Math.sin(Math.PI/12.0);
+                            numbershrugged[i]+=sb[1];
+                        }
+                    }
+                    tran=numbershrugged.slice(0);
+                    
+                    draw(numbershrugged);  
+                    dracanvas(a,b);//坐标系     
+                }
+                }
+                //旋转
+                function rotate()
+                {
+                	if(canChange==true)
+                	{
+                    var numberrotateshun = new Array();
+                    numberrotateshun=tran.slice(0);
+                    var xrotateshun=new Array();
+                    var yrotateshun=new Array();
+                    var x,y;
+                    var sb=new Array();
+                    xrotateshun=tranx.slice(0);
+                    yrotateshun=trany.slice(0);
+ 
+                    sb=outsourcing(numberrotateshun);
+ 
+                    for(var i=0;i<numberrotateshun.length;i++){
+                        if(numberrotateshun[i]!=-1){
+                            x=numberrotateshun[i];
+                            y=numberrotateshun[i+1]; 
+                            x-=sb[0];
+                            y-=sb[1];
+                            numberrotateshun[i]=x*Math.cos(Math.PI/36.0)-y*Math.sin(Math.PI/36.0);
+                            numberrotateshun[i]+=sb[0];
+                            numberrotateshun[++i]=x*Math.sin(Math.PI/36.0)+y*Math.cos(Math.PI/36.0);
+                            numberrotateshun[i]+=sb[1];
+                        }
+                    }
+                    tran=numberrotateshun.slice(0);
+                    
+                    draw(numberrotateshun); 
+                    dracanvas(a,b);//坐标系
+                }
+                    
+                }
+                //缩小
+                function shrink()
+                {
+                	if(canChange==true)
+                	{
+                    var numbershrink = new Array();
+                    numbershrink=tran.slice(0);
+                    var xshrink=new Array();
+                    var yshrink=new Array();
+                    xshrink=tranx.slice(0);
+                    yshrink=trany.slice(0);
+ 
+                    for(var i=0;i<numbershrink.length;i++){
+                        if(numbershrink[i]!=-1){
+                            numbershrink[i]*=0.95;
+                        }
+                       
+                    }
+                    for(var i=0;i<tran.length;i++){
+                        xshrink[i]*=0.95;
+                        yshrink[i]*=0.95;         
+                    }
+                    tran=numbershrink.slice(0);
+                    tranx=xshrink.slice(0);
+                    trany=yshrink.slice(0);
+                    
+                    draw(numbershrink);
+                    dracanvas(a,b);//坐标系
+                }
+
+                }
+                //上平移
+                function translatetop()
+                {
+                	if(canChange==true)
+                	{
+                    var numbertranslatetop = new Array();
+                    numbertranslatetop=tran.slice(0);
+                    var xtranslatetop=new Array();
+                    var ytranslatetop=new Array();
+                    xtranslatetop=tranx.slice(0);
+                    ytranslatetop=trany.slice(0);
+ 
+                    for(var i=0;i<numbertranslatetop.length;i++){
+                        if(numbertranslatetop[i]!=-1){
+                            numbertranslatetop[++i]-=0.2;
+                        }                 
+                    }
+                    tran=numbertranslatetop.slice(0);
+                    tranx=xtranslatetop.slice(0);
+                    trany=ytranslatetop.slice(0);
+                    
+                    draw(numbertranslatetop);
+                    dracanvas(a,b);//坐标系
+                }
+                }
+                //左平移
+                function translateleft()
+                {
+                	if(canChange==true)
+                	{
+                    var numbertranslateleft = new Array();
+                    numbertranslateleft=tran.slice(0);
+                    var xtranslateleft=new Array();
+                    var ytranslateleft=new Array();
+                    xtranslateleft=tranx.slice(0);
+                    ytranslateleft=trany.slice(0);
+ 
+                    for(var i=0;i<numbertranslateleft.length;i++){
+                        if(numbertranslateleft[i]!=-1){
+                            numbertranslateleft[i]+=0.2;
+                            i++;
+                        }                 
+                    }
+                    tran=numbertranslateleft.slice(0);
+                    tranx=xtranslateleft.slice(0);
+                    trany=ytranslateleft.slice(0);
+                    
+                    draw(numbertranslateleft);
+                    dracanvas(a,b);//坐标系
+                }
+                }
+                //上下对称
+                function symmetryy()
+                {
+                	if(canChange==true)
+                	{
+                    var numbersymmetryy = new Array();
+                    numbersymmetryy=tran.slice(0);
+                    var xsymmetryy=new Array();
+                    var ysymmetryy=new Array();
+                    var x,y;
+                    var sb=new Array();
+                    xsymmetryy=tranx.slice(0);
+                    ysymmetryy=trany.slice(0);
+ 
+                    sb=outsourcing(numbersymmetryy);
+ 
+                    for(var i=1;i<numbersymmetryy.length;i++){
+                        if(numbersymmetryy[i]!=-1){
+                            y=numbersymmetryy[++i];
+                            y-=sb[1];
+                            numbersymmetryy[i]=-y;
+                            numbersymmetryy[i]+=sb[1];
+                        }
+                    }
+                    tran=numbersymmetryy.slice(0);
+                    
+                    draw(numbersymmetryy); 
+                    dracanvas(a,b);
+                }
+                }
+                //左右对称
+                function symmetryx()
+                {
+                	if(canChange==true)
+                	{
+                    var numbersymmetryx = new Array();
+                    numbersymmetryx=tran.slice(0);
+                    var xsymmetryx=new Array();
+                    var ysymmetryx=new Array();
+                    var x,y;
+                    var sb=new Array();
+                    xsymmetryx=tranx.slice(0);
+                    ysymmetryx=trany.slice(0);
+ 
+                    sb=outsourcing(numbersymmetryx);
+ 
+                    for(var i=1;i<numbersymmetryx.length;i++){
+                        if(numbersymmetryx[i]!=-1){
+                            x=numbersymmetryx[i];
+                            x-=sb[0];
+                            numbersymmetryx[i]=-x;
+                            numbersymmetryx[i]+=sb[0];
+                            i++;
+                        }
+                    }
+                    tran=numbersymmetryx.slice(0);
+                    
+                    draw(numbersymmetryx); 
+                    dracanvas(a,b);//坐标系  
+                }
+                }
+                //还原
+                function reduction()
+                {
+                	if(canChange==true)
+                	{
+                    tran=number.slice(0);
+                    tranx=a.slice(0);
+                    trany=b.slice(0);
+                    draw(number);  
+                    dracanvas(tranx,trany);//坐标系   
+                    }   
+                }
+
+                function changeBox1()
+                {
+                	canChange=true;
+                	number=number1;
+                	tran=tran1;
+                	a=a1;
+                	b=b1;
+                	tranx=tranx1;
+                	trany=trany1;
+                	thiscanvas="myCanvas";
+                }
+
+                function changeBox2()
+                {
+                	canChange=true;
+                	number=number2;
+                	tran=tran2;
+                	a=a2;
+                	b=b2;
+                	tranx=tranx2;
+                	trany=trany2;
+                	thiscanvas="myCanvas2";
+                }
+
+  
+        		//主函数
+                function processFiles(){ 
+                    var file=document.getElementById("fileInput").files[0];
+                    var reader=new FileReader();
+                    reader.readAsText(file);
+                    reader.onload=function(e)
+                    {
+                        var str = this.result;//读取文本
+                            
+                        number1= digitalExtraction(str,number1);//提取数字并存入数组
+                        tran1=number1.slice(0);
+                        XY(a1,b1,tranx1,trany1);
+ 						
+ 						thiscanvas="myCanvas";
+                        draw(number1);
+                        dracanvas(a1,b1);           
+                    }
+                }
+                function processFiles2(){ 
+                    var file=document.getElementById("fileInput2").files[0];
+                    var reader=new FileReader();
+                    reader.readAsText(file);
+                    reader.onload=function(e)
+                    {
+                        var str = this.result;//读取文本
+                            
+                        number2= digitalExtraction(str,number2);//提取数字并存入数组
+                        tran2=number2.slice(0);
+                        XY(a2,b2,tranx2,trany2);
+ 						
+ 						thiscanvas="myCanvas2";
+                        draw(number2);
+                        dracanvas(a2,b2);                   
+                    }
+                }
+                //提取数字，并存入数组
+                function digitalExtraction(str,number){
+                        var heap= str.replace(/[^0-9.L]/ig,"A");
+ 
+                        var numcharacter="";//存储数字字符
+                        var number =new Array();//提取数字数组
+                        var i=0;
+                        var flag=0;//heap字符串当前标记
+                        var n=0;//标识数字与字符转换位置
+                        var character=heap[flag];//获取字符串的一个字符
+                    // document.write(heap);
+                        while(character!=null){
+                            if(character=="L"){
+                                number[i++]=-1;
+                                flag+=2;
+                                character=heap[flag];
+                            }
+                            if(character!="A"){
+                                n=1;
+                                numcharacter+=character;
+                            }
+                            else{
+                                if(n){
+                                    number[i++]=parseFloat(numcharacter);
+                                    numcharacter="";
+                                    n=0;
+                                }
+                            }
+                            character=heap[++flag];
+                        }
+                    
+                        return number;
+                }
+                //画图函数
+                function draw(numb){
+                    var canvas=document.getElementById(thiscanvas);
+                        
+                        
+                    var cxt=canvas.getContext('2d'); 
+                    cxt.lineWidth = 8;
+                    cxt.strokeStyle = "balck";   
+                    var n= numb.length;
+                    numb[n]=-1;
+                    var n= numb.length;
+ 
+                    var flag=0;
+                    var x= new Array();
+                    var y =new Array();
+                    var j=0;
+                    cxt.clearRect(0,0,900,900);
+                    
+                    for(var i=1,j=0;i<n;i++){
+                        if(numb[i]!=-1){
+                            x[j]=numb[i]*15;
+                            y[j]=numb[++i]*15;
+                            j++;
+                        }else{
+                            cxt.beginPath();
+                            cxt.moveTo(x[0],y[0]);
+                            for(var k=1;k<j;k++){
+                                cxt.lineTo(x[k],y[k]);
+                            }
+                            cxt.stroke();
+                            j=0;
+                        }
+                    }
+                }
+                //XY轴坐标初始化
+                function XY(a,b,tranx,trany){
+                    for(var i=0;i<32;i++){
+                        a[i]=i*10;
+                        b[i]=i*10;
+                    }
+                    tranx=a.slice(0);
+                    trany=b.slice(0);
+                }
+                //画布
+                function dracanvas(ax,by){
+                    var canvas=document.getElementById(thiscanvas);
+ 
+                    var ctx =canvas.getContext('2d');
+                    ctx.lineWidth = 1;
+                    ctx.strokeStyle = "black";  
+                    
+                    for(var i=0;i<32;i++){
+                        ctx.beginPath();
+                        ctx.moveTo(ax[0],by[i]);
+                        ctx.lineTo(ax[31],by[i]);
+                        ctx.stroke();
+                    }
+                    for(var i=0;i<32;i++){
+                        ctx.beginPath();
+                        ctx.moveTo(ax[i],by[0]);
+                        ctx.lineTo(ax[i],by[31]);  
+                        ctx.stroke();
+                    }
+                }
+                //当前名字图形中心求解
+                function outsourcing(arr){
+                    var xs,ys,xb,yb;
+                    var xm,ym;
+                    var sb=new Array();
+                    xb=arr[1];
+                    yb=arr[2];
+                    xs=arr[1];
+                    ys=arr[2];
+                    for(var i=3;i<arr.length;i++){
+                        if(arr[i]!=-1){
+                            if(xb<arr[i]){
+                                xb=arr[i];
+                            }
+                            if(xs>arr[i]){
+                                xs=arr[i];
+                            }
+                            if(yb<arr[++i]){
+                                yb=arr[i];
+                            }
+                            if(ys>arr[i]){
+                                ys=arr[i];
+                            }
+                        }
+                    }
+                    xm=(xs+xb)/2;
+                    ym=(ys+yb)/2;
+                    sb[0]=xm;;
+                    sb[1]=ym;
+ 
+                    return sb;
+                }
+    </script>
+</body>
+</html>
