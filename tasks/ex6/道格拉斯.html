@@ -8,6 +8,8 @@
             </title>
         </head>
         <body>
+            <fieldset style="width:800px;">
+            <legend>10170354-程乐嘉</legend>
             <div>
                <input id="fileInput" type="file" onchange="processFiles()"/>
                <input value="压缩" type="submit" onclick="douglasPeucker()"/>
@@ -17,7 +19,7 @@
                <br>
                <canvas id="myCanvas" width="800" height="700" style="border:1px solid #c3c3c3">your browser does not support the canvas tag </canvas>
             </div>
-            
+            </fieldset>
             <script>
                var number = new Array();//存储原始点数据
                var numberdp = new Array();//压缩数据

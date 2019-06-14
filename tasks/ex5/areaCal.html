@@ -8,6 +8,8 @@
 	</head>
 
 	<body>
+		<fieldset style="width:1400px;">
+		<legend>10170354-程乐嘉</legend>
 		<a>添加地图：</a>
 		<input type="file" id="file" style="width: 200px;" />
 		<a>选择投影：</a>
@@ -19,6 +21,7 @@
 		<br/>
 		<canvas id="map" style="border:1px solid #000;margin-top:20px;"></canvas>
 		<div style="position: absolute; left:700px; top:18px;">
+			<br>
 			<a>面积计算：</a>
 			<select style="height:25px;margin-right: 20px;margin-left: 30px" id="type2">
 				<option value="mercator">墨卡托投影</option>
@@ -28,6 +31,7 @@
 			<div id="main" style="width: 620px;height:570px;position:absolute;margin-top:30px;"></div>
 			<textarea name="r_text" id="rr_text" cols="100" rows="40"onpropertychange= "this.style.posHeight=this.scrollHeight "></textarea>
 		</div>
+	</fieldset>
 	</body>
 	<script>
 		var canvas = document.getElementById('map');

@@ -9,7 +9,8 @@
 </header>
 
 <body>
-
+    <fieldset style="width:800px;">
+    <legend>10170354-程乐嘉</legend>
     <input type="file" id="file" onchange="readGen(this.file)">
     <br>
     原图：
@@ -24,6 +25,7 @@
     <div class="container2">
     	<textarea name="r_text" id="rr_text" cols="200" rows="100"onpropertychange= "this.style.posHeight=this.scrollHeight "></textarea>
     </div>>
+    </fieldset>
 
 
     <script>
@@ -870,11 +872,7 @@
                 var mycanvas = document.getElementById("canvas");
                 mycanvas.setAttribute("width", "800px");
                 mycanvas.setAttribute("height", "400px");
-                var mycanvas1 = document.getElementById("canvas1");
-                mycanvas1.setAttribute("width", "1px");
-                mycanvas1.setAttribute("height", "1px");
                 var context = mycanvas.getContext("2d");
-                var context1 = mycanvas1.getContext("2d");
                 var nodes = new Array();
                 var arcs = new Array();
                 var polygons = new Array();
