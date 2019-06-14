@@ -1,6 +1,6 @@
 ## 10170354-程乐嘉
 
-算法相关测试数据都提供仓库中的[data文件]中(https://terasassin.github.io/data)
+算法相关测试数据都提供仓库中的data文件中
 
 ### [1. 跳马](https://terasassin.github.io/tasks/ex1/jumpma.html)
 ### [2. 工作序列](https://terasassin.github.io/tasks/ex1/工作序列.html)
