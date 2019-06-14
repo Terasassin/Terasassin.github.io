@@ -1,8 +1,6 @@
-## Welcome to GitHub Pages
+## GIS算法基础作业发布
 
-You can use the [editor on GitHub](https://github.com/Terasassin/Terasassin.github.io/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+10170354-程乐嘉
 
 ### Markdown
 
